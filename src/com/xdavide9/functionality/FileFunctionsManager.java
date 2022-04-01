@@ -89,7 +89,9 @@ public class FileFunctionsManager {
 
                 StringBuilder builder = new StringBuilder(path);
                 fileName = builder.substring(builder.lastIndexOf("\\") + 1);
-                gui.getFrame().setTitle(fileName + ".txt");
+                if (!fileName.endsWith(".txt"))
+                    fileName = fileName + ".txt";
+                gui.getFrame().setTitle(fileName);
                 System.out.println("Saved as a New File");
             } catch (IOException e) {
                 e.printStackTrace();
