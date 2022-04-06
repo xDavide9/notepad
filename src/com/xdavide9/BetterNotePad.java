@@ -39,7 +39,7 @@ public class BetterNotePad {
         customizeLaf();
 
         //setting up an Icon
-        String path = "icon.png";
+        String path = "Icon.png";
         if (Files.exists(Paths.get(path))) {
             icon = new ImageIcon(path).getImage();
             System.out.println("Icon set correctly");
