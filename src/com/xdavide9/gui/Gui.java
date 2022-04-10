@@ -21,14 +21,14 @@ public class Gui implements ActionListener {
 
     private final FileFunctionsManager fManager;
     private final EditFunctionsManager eManager;
-    private final FormatFunctionsManager formatManger;
+    private final FormatFunctionsManager formatManager;
     private final HelpFunctionsManager helpManager;
 
     public Gui(String title, int x, int y, int width, int height, Font font, boolean lineWrap) {
         String[] options = {"Save", "Don't Save", "Cancel"};
         fManager = new FileFunctionsManager(this, options);
         eManager = new EditFunctionsManager(this, 1000);
-        formatManger = new FormatFunctionsManager(this);
+        formatManager = new FormatFunctionsManager(this);
         helpManager = new HelpFunctionsManager(this);
 
         createFrame(title, x, y, width, height);
@@ -86,8 +86,8 @@ public class Gui implements ActionListener {
             case "Paste" -> eManager.paste();
             case "Cut" -> eManager.cut();
             //format
-            case "Font..." -> formatManger.font("Select Font", "Apply");
-            case "Line Wrap" -> formatManger.lineWrap();
+            case "Font..." -> formatManager.font("Select Font", "Apply");
+            case "Line Wrap" -> formatManager.lineWrap();
             //help
             case "Contact" -> helpManager.contact();
         }

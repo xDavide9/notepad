@@ -59,7 +59,6 @@ public class MenuBarManager {
         saveAsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,  KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK));
         fileMenu.add(saveAsItem);
 
-        //fileMenu
         JMenuItem exitItem = new JMenuItem("Exit");
         exitItem.addActionListener(listener);
         exitItem.setActionCommand("Exit");
@@ -91,7 +90,6 @@ public class MenuBarManager {
         pasteItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK));
         editMenu.add(pasteItem);
 
-        //editMenu
         JMenuItem cutItem = new JMenuItem("Cut");
         cutItem.addActionListener(listener);
         cutItem.setActionCommand("Cut");
@@ -100,7 +98,6 @@ public class MenuBarManager {
     }
 
     private void createFormatItems(ActionListener listener) {
-        //formatMenu
         JMenuItem lineWrapItem = new JMenuItem("Line Wrap");
         lineWrapItem.addActionListener(listener);
         lineWrapItem.setActionCommand("Line Wrap");
@@ -110,7 +107,6 @@ public class MenuBarManager {
         fontItem.addActionListener(listener);
         fontItem.setActionCommand("Font...");
         formatMenu.add(fontItem);
-
     }
 
     public void createHelpItems(ActionListener listener) {

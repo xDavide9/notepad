@@ -19,11 +19,11 @@ public class BetterNotePad {
     private static final String defaultFontFamily = "Segoe UI";
     private static Image icon;
 
-    private final Gui gui;
+    private Gui gui;
     private DataHolder dataHolder;
-    private final DataManager dataManager;
+    private DataManager dataManager;
 
-    private static String filePath;
+    private static String fileToOpen;
 
     public static void main(String[] args) {
         try {
@@ -37,23 +37,12 @@ public class BetterNotePad {
         }
 
         customizeLaf();
-
-        //setting up an Icon
-        String path = "Icon.png";
-        if (Files.exists(Paths.get(path))) {
-            icon = new ImageIcon(path).getImage();
-            System.out.println("Icon set correctly");
-        } else {
-            icon = null;
-            System.err.println("Could not set Icon");
-        }
-
+        icon = setUpIcon("Icon.png");
         SwingUtilities.invokeLater(BetterNotePad::new);
 
-        //getting the file path from args if it exists
         try {
             if (args[0] != null)
-                filePath = args[0];
+                fileToOpen = args[0];
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
             System.err.println("No path provided to args");
@@ -61,21 +50,12 @@ public class BetterNotePad {
     }
 
     private BetterNotePad() {
-        dataManager = new DataManager();
+        createGui();
+        saveConfiguration();
+        open(fileToOpen);
+    }
 
-        dataHolder = dataManager.deserialize();   //tries to set the current dataHolder to the one that was deserialized
-        if (dataHolder == null)
-            dataHolder = new DataHolder();  //if it is null, it is a first time run and a new one is initialised
-
-        if (dataHolder.isHolding()) {   //checks if dataHolder holds and if it does, create a gui with custom values
-            gui = new Gui(BetterNotePad.initialFileName, dataHolder.getX(), dataHolder.getY(),
-                    dataHolder.getWidth(), dataHolder.getHeight(), dataHolder.getFont(), dataHolder.isLineWrap());
-        } else {
-            //first time run configuration
-            gui = new Gui(BetterNotePad.initialFileName, 0, 0, 970, 600,
-                    new Font(BetterNotePad.defaultFontFamily, Font.PLAIN, 22), true);
-        }
-
+    private void saveConfiguration() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             Rectangle rect = gui.getFrame().getBounds();
             dataHolder.setX(rect.x);
@@ -86,13 +66,29 @@ public class BetterNotePad {
             dataHolder.setLineWrap(gui.getTextArea().getLineWrap());
             dataManager.serialize(dataHolder);
         }));
+    }
 
-        //opening the file supplied by command line
-        open(filePath);
+    private void createGui() {
+        dataManager = new DataManager();
 
-        //setting the path of the file to the path in the code
-        if (filePath != null)
-            gui.getfManager().setPath(filePath);
+        dataHolder = dataManager.deserialize();
+        if (dataHolder == null)
+            dataHolder = new DataHolder();
+
+        if (dataHolder.isHolding()) {
+            gui = new Gui(BetterNotePad.initialFileName, dataHolder.getX(), dataHolder.getY(),
+                    dataHolder.getWidth(), dataHolder.getHeight(), dataHolder.getFont(), dataHolder.isLineWrap());
+            return;
+        }
+
+        gui = new Gui(BetterNotePad.initialFileName, 0, 0, 970, 600,
+                new Font(BetterNotePad.defaultFontFamily, Font.PLAIN, 22), true);
+    }
+
+    private static Image setUpIcon(String path) {
+        if (Files.exists(Paths.get(path)))
+            return new ImageIcon(path).getImage();
+        return null;
     }
 
     private void open(String path) {
@@ -113,11 +109,14 @@ public class BetterNotePad {
             StringBuilder builder = new StringBuilder(path);
             String fileName = builder.substring(builder.lastIndexOf("\\") + 1);
             gui.getFrame().setTitle(fileName);
+
             System.out.println("File Opened");
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Could not Open File");
         }
+
+        gui.getfManager().setPath(fileToOpen);
     }
 
     private static void customizeLaf() {
