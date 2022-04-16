@@ -1,9 +1,9 @@
-package com.xdavide9.data;
+package com.xdavide9.configuration;
 
 import java.awt.*;
 import java.io.Serializable;
 
-public class DataHolder implements Serializable {
+public class Configuration implements Serializable {
 
     //this type holds the fields which need to be serialized
 
@@ -11,8 +11,7 @@ public class DataHolder implements Serializable {
     private Font font;
     private boolean lineWrap;
 
-    public boolean isHolding() {
-        //if font is set, it means that the file should hold configuration
+    public boolean isSet() {
         return font != null;
     }
 

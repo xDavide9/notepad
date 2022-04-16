@@ -1,4 +1,4 @@
-package com.xdavide9.functionality;
+package com.xdavide9.services;
 
 import com.xdavide9.BetterNotePad;
 import com.xdavide9.gui.Gui;
@@ -8,12 +8,12 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FormatFunctionsManager {
+public class FormatService {
 
     private final Gui gui;
     private Font font;
 
-    public FormatFunctionsManager(Gui gui) {
+    public FormatService(Gui gui) {
         this.gui = gui;
     }
 
@@ -33,7 +33,7 @@ public class FormatFunctionsManager {
         JFrame frame = new JFrame(title);
         frame.setLocationRelativeTo(gui.getFrame());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setIconImage(BetterNotePad.getIcon());
+        frame.setIconImage(gui.icon());
         frame.setLayout(new GridBagLayout());
 
         //font names
@@ -73,6 +73,7 @@ public class FormatFunctionsManager {
             Integer fontSize = sizesList.getSelectedValue();
 
             //todo to be serialized
+            //noinspection MagicConstant
             font = new Font(fontName, fontStyle, fontSize);
             gui.getTextArea().setFont(font);
             System.out.println("Successfully set new Font: " + font);

@@ -1,4 +1,4 @@
-package com.xdavide9.gui;
+package com.xdavide9.services;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
@@ -6,12 +6,12 @@ import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import java.util.List;
 
-public class MenuBarManager {
+public class MenuBarService {
 
     private final JMenuBar menuBar;
     private JMenu fileMenu, editMenu, formatMenu, helpMenu;
 
-    MenuBarManager(ActionListener listener) {
+    public MenuBarService(ActionListener listener) {
         menuBar = new JMenuBar();
 
         createMenus();

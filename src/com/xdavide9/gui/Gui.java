@@ -1,10 +1,6 @@
 package com.xdavide9.gui;
 
-import com.xdavide9.BetterNotePad;
-import com.xdavide9.functionality.EditFunctionsManager;
-import com.xdavide9.functionality.FileFunctionsManager;
-import com.xdavide9.functionality.FormatFunctionsManager;
-import com.xdavide9.functionality.HelpFunctionsManager;
+import com.xdavide9.services.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Gui implements ActionListener {
 
@@ -19,17 +17,17 @@ public class Gui implements ActionListener {
     private JTextArea textArea;
     private JScrollPane scrollPane;
 
-    private final FileFunctionsManager fManager;
-    private final EditFunctionsManager eManager;
-    private final FormatFunctionsManager formatManager;
-    private final HelpFunctionsManager helpManager;
+    private final FileService fileService;
+    private final EditService editService;
+    private final FormatService formatService;
+    private final HelpService helpService;
 
     public Gui(String title, int x, int y, int width, int height, Font font, boolean lineWrap) {
         String[] options = {"Save", "Don't Save", "Cancel"};
-        fManager = new FileFunctionsManager(this, options);
-        eManager = new EditFunctionsManager(this, 1000);
-        formatManager = new FormatFunctionsManager(this);
-        helpManager = new HelpFunctionsManager(this);
+        fileService = new FileService(this, options);
+        editService = new EditService(this, 1000);
+        formatService = new FormatService(this);
+        helpService = new HelpService(this);
 
         createFrame(title, x, y, width, height);
         createTextArea(font, lineWrap);
@@ -39,17 +37,17 @@ public class Gui implements ActionListener {
 
     private void createFrame(String title, int x, int y, int width, int height) {
         frame = new JFrame(title);
-        frame.setIconImage(BetterNotePad.getIcon());
+        frame.setIconImage(icon());
         frame.setBounds(x, y, width, height);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                fManager.exit();
+                fileService.exit();
             }
         });
 
-        frame.setJMenuBar(new MenuBarManager(this).getMenuBar());
+        frame.setJMenuBar(new MenuBarService(this).getMenuBar());
     }
 
     private void createTextArea(Font font, boolean lineWrap) {
@@ -57,7 +55,7 @@ public class Gui implements ActionListener {
         textArea.setFont(font);
         textArea.setLineWrap(lineWrap);
         textArea.setWrapStyleWord(true);
-        textArea.getDocument().addUndoableEditListener(e -> eManager.getUndoManager().addEdit(e.getEdit()));
+        textArea.getDocument().addUndoableEditListener(e -> editService.getUndoManager().addEdit(e.getEdit()));
 
         scrollPane = new JScrollPane(textArea);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -69,27 +67,33 @@ public class Gui implements ActionListener {
         frame.add(scrollPane);
     }
 
+    public Image icon() {
+        if (Files.exists(Paths.get("Icon.png")))
+            return new ImageIcon("Icon.png").getImage();
+        return null;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         switch (command) {
             //file
-            case "New" -> fManager.New();
-            case "SaveAs" -> fManager.saveAs();
-            case "Save" -> fManager.save();
-            case "Open" -> fManager.open();
-            case "Exit" -> fManager.exit();
+            case "New" -> fileService.New();
+            case "SaveAs" -> fileService.saveAs();
+            case "Save" -> fileService.save();
+            case "Open" -> fileService.open();
+            case "Exit" -> fileService.exit();
             //edit
-            case "Undo" -> eManager.undo();
-            case "Redo" -> eManager.redo();
-            case "Copy" -> eManager.copy();
-            case "Paste" -> eManager.paste();
-            case "Cut" -> eManager.cut();
+            case "Undo" -> editService.undo();
+            case "Redo" -> editService.redo();
+            case "Copy" -> editService.copy();
+            case "Paste" -> editService.paste();
+            case "Cut" -> editService.cut();
             //format
-            case "Font..." -> formatManager.font("Select Font", "Apply");
-            case "Line Wrap" -> formatManager.lineWrap();
+            case "Font..." -> formatService.font("Select Font", "Apply");
+            case "Line Wrap" -> formatService.lineWrap();
             //help
-            case "Contact" -> helpManager.contact();
+            case "Contact" -> helpService.contact();
         }
     }
 
@@ -107,7 +111,7 @@ public class Gui implements ActionListener {
         return scrollPane;
     }
 
-    public FileFunctionsManager getfManager() {
-        return fManager;
+    public FileService getFileService() {
+        return fileService;
     }
 }

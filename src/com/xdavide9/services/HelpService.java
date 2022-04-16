@@ -1,14 +1,14 @@
-package com.xdavide9.functionality;
+package com.xdavide9.services;
 
 import com.xdavide9.gui.Gui;
 
 import javax.swing.*;
 
-public class HelpFunctionsManager {
+public class HelpService {
 
     private final Gui gui;
 
-    public HelpFunctionsManager(Gui gui) {
+    public HelpService(Gui gui) {
         this.gui = gui;
     }
 

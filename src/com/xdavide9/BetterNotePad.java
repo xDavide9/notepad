@@ -1,31 +1,42 @@
 package com.xdavide9;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
-import com.xdavide9.data.DataHolder;
-import com.xdavide9.data.DataManager;
+import com.xdavide9.configuration.Configuration;
+import com.xdavide9.configuration.ConfigurationSerializer;
 import com.xdavide9.gui.Gui;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class BetterNotePad {
 
-    private static final String appName = "BetterNotePad";
-    private static final String initialFileName = "Untitled";
     private static final String defaultFontFamily = "Segoe UI";
-    private static Image icon;
-
-    private Gui gui;
-    private DataHolder dataHolder;
-    private DataManager dataManager;
-
+    private static final String initialFileName = "Untitled";
+    private ConfigurationSerializer configurationSerializer;
+    private static final String appName = "BetterNotePad";
+    private Configuration configuration;
     private static String fileToOpen;
+    private Gui gui;
 
     public static void main(String[] args) {
+        fileToOpen = fileToOpen(args);
+        customizeLaf();
+        SwingUtilities.invokeLater(BetterNotePad::new);
+    }
+
+    private static String fileToOpen(String[] args) {
+        try {
+            return args[0];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.err.println("No path provided to args");
+        }
+
+        return null;
+    }
+
+    private static void customizeLaf() {
         try {
             UIManager.setLookAndFeel(new FlatDarculaLaf() {
                 //removing the content of this method because it was responsible for producing an annoying beep sound
@@ -36,59 +47,39 @@ public class BetterNotePad {
             e.printStackTrace();
         }
 
-        customizeLaf();
-        icon = setUpIcon("Icon.png");
-        SwingUtilities.invokeLater(BetterNotePad::new);
-
-        try {
-            if (args[0] != null)
-                fileToOpen = args[0];
-        } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-            System.err.println("No path provided to args");
-        }
+        UIManager.put("ScrollBar.showButtons", true);
+        UIManager.put("ScrollBar.width", 12);
+        UIManager.put("defaultFont", new Font(BetterNotePad.defaultFontFamily, Font.PLAIN, 14));
     }
 
     private BetterNotePad() {
         createGui();
-        saveConfiguration();
         open(fileToOpen);
+        saveConfiguration();
     }
 
-    private void saveConfiguration() {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            Rectangle rect = gui.getFrame().getBounds();
-            dataHolder.setX(rect.x);
-            dataHolder.setY(rect.y);
-            dataHolder.setWidth(rect.width);
-            dataHolder.setHeight(rect.height);
-            dataHolder.setFont(gui.getTextArea().getFont());
-            dataHolder.setLineWrap(gui.getTextArea().getLineWrap());
-            dataManager.serialize(dataHolder);
-        }));
-    }
-
+    // todo can be improved more, maybe with Optional
     private void createGui() {
-        dataManager = new DataManager();
+        configurationSerializer = new ConfigurationSerializer();
 
-        dataHolder = dataManager.deserialize();
-        if (dataHolder == null)
-            dataHolder = new DataHolder();
+        configuration = configurationSerializer.deserialize();
 
-        if (dataHolder.isHolding()) {
-            gui = new Gui(BetterNotePad.initialFileName, dataHolder.getX(), dataHolder.getY(),
-                    dataHolder.getWidth(), dataHolder.getHeight(), dataHolder.getFont(), dataHolder.isLineWrap());
+        if (configuration == null)
+            configuration = new Configuration();
+
+        if (configuration.isSet()) {
+            gui = new Gui(BetterNotePad.initialFileName,
+                    configuration.getX(),
+                    configuration.getY(),
+                    configuration.getWidth(),
+                    configuration.getHeight(),
+                    configuration.getFont(),
+                    configuration.isLineWrap());
             return;
         }
 
         gui = new Gui(BetterNotePad.initialFileName, 0, 0, 970, 600,
                 new Font(BetterNotePad.defaultFontFamily, Font.PLAIN, 22), true);
-    }
-
-    private static Image setUpIcon(String path) {
-        if (Files.exists(Paths.get(path)))
-            return new ImageIcon(path).getImage();
-        return null;
     }
 
     private void open(String path) {
@@ -116,13 +107,20 @@ public class BetterNotePad {
             System.err.println("Could not Open File");
         }
 
-        gui.getfManager().setPath(fileToOpen);
+        gui.getFileService().setPath(fileToOpen);
     }
 
-    private static void customizeLaf() {
-        UIManager.put("ScrollBar.showButtons", true);
-        UIManager.put("ScrollBar.width", 12);
-        UIManager.put("defaultFont", new Font(BetterNotePad.defaultFontFamily, Font.PLAIN, 14));
+    private void saveConfiguration() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            Rectangle rect = gui.getFrame().getBounds();
+            configuration.setX(rect.x);
+            configuration.setY(rect.y);
+            configuration.setWidth(rect.width);
+            configuration.setHeight(rect.height);
+            configuration.setFont(gui.getTextArea().getFont());
+            configuration.setLineWrap(gui.getTextArea().getLineWrap());
+            configurationSerializer.serialize(configuration);
+        }));
     }
 
     // GETTERS
@@ -135,7 +133,4 @@ public class BetterNotePad {
         return initialFileName;
     }
 
-    public static Image getIcon() {
-        return icon;
-    }
 }

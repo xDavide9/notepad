@@ -1,4 +1,4 @@
-package com.xdavide9.functionality;
+package com.xdavide9.services;
 
 import com.xdavide9.gui.Gui;
 
@@ -6,12 +6,12 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
-public class EditFunctionsManager {
+public class EditService {
 
     private final Gui gui;
     private final UndoManager undoManager;
 
-    public EditFunctionsManager(Gui gui, int undoManagerEditLimit) {
+    public EditService(Gui gui, int undoManagerEditLimit) {
         this.gui = gui;
         undoManager = new UndoManager();
         undoManager.setLimit(undoManagerEditLimit);
