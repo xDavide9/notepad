@@ -2,13 +2,17 @@ package com.xdavide9.services;
 
 import com.xdavide9.BetterNotePad;
 import com.xdavide9.gui.Gui;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Slf4j
 public class FileService {
 
     private final Gui gui;
@@ -25,13 +29,12 @@ public class FileService {
         this.savingTabOptions = savingTabOptions;
     }
 
-    // todo ask whether to save if necessary
     public void New() {
         path = "";
         fileName = BetterNotePad.getInitialFileName();
         gui.getTextArea().setText("");
         gui.getFrame().setTitle(fileName);
-        System.out.println("Created New File");
+        log.info("Successfully created a new File");
     }
 
     public void open() {
@@ -43,17 +46,15 @@ public class FileService {
 
             try {
                 readContent();
-                System.out.println("File Opened");
+                log.info("Successfully opened desired file");
             } catch (IOException e) {
-                e.printStackTrace();
-                System.err.println("Could not Open File");
+                log.error("Could not open desired file", e);
             }
 
             return;
         }
 
-        System.err.println("Did not choose a File");
-
+        log.error("No file to open was chosen");
     }
 
     public void saveAs() {
@@ -65,10 +66,9 @@ public class FileService {
 
             try {
                 writeContent();
-                System.out.println("Saved as a New File");
+                log.info("Successfully saved as a new file");
             } catch (IOException e) {
-                e.printStackTrace();
-                System.err.println("Could not Save As a New File");
+                log.error("Could not save as a new file", e);
             }
         }
     }
@@ -81,10 +81,9 @@ public class FileService {
         if (!(path.equals(""))) {
             try {
                 writeContent();
-                System.out.println("Saved Successfully");
+                log.info("Successfully saved");
             } catch (IOException e) {
-                e.printStackTrace();
-                System.err.println("Could not Save");
+                log.error("Could not Save", e);
             }
         }
     }
@@ -101,7 +100,7 @@ public class FileService {
 
         if (path.equals("")) {
             if (gui.getTextArea().getText().equals("")) {
-                System.err.println("Exiting without Saving");
+                log.info("Exiting without saving");
                 System.exit(0);
             }
 
@@ -110,7 +109,7 @@ public class FileService {
 
         if (!(path.equals(""))) {
             if (areEqual()) {
-                System.err.println("Exiting without Saving");
+                log.info("Exiting without Saving");
                 System.exit(0);
             }
 
@@ -155,7 +154,7 @@ public class FileService {
                 System.exit(0);
             }
             case JOptionPane.NO_OPTION ->  {
-                System.err.println("Exiting without Saving");
+                log.info("Exiting without Saving");
                 System.exit(0);
             }
         }

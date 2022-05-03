@@ -1,6 +1,7 @@
 package com.xdavide9.gui;
 
 import com.xdavide9.services.*;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +12,7 @@ import java.awt.event.WindowEvent;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+@Slf4j
 public class Gui implements ActionListener {
 
     private JFrame frame;
@@ -23,8 +25,7 @@ public class Gui implements ActionListener {
     private final HelpService helpService;
 
     public Gui(String title, int x, int y, int width, int height, Font font, boolean lineWrap) {
-        String[] options = {"Save", "Don't Save", "Cancel"};
-        fileService = new FileService(this, options);
+        fileService = new FileService(this, new String[]{"Save", "Don't Save", "Cancel"});
         editService = new EditService(this, 1000);
         formatService = new FormatService(this);
         helpService = new HelpService(this);
@@ -37,7 +38,7 @@ public class Gui implements ActionListener {
 
     private void createFrame(String title, int x, int y, int width, int height) {
         frame = new JFrame(title);
-        frame.setIconImage(icon());
+        frame.setIconImage(icon()); //todo improve with optionals
         frame.setBounds(x, y, width, height);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
@@ -68,8 +69,11 @@ public class Gui implements ActionListener {
     }
 
     public Image icon() {
-        if (Files.exists(Paths.get("Icon.png")))
+        if (Files.exists(Paths.get("Icon.png"))) {
+            log.info("Icon provided");
             return new ImageIcon("Icon.png").getImage();
+        }
+        log.info("No Icon provided");
         return null;
     }
 
@@ -77,27 +81,25 @@ public class Gui implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         switch (command) {
-            //file
+            // file
             case "New" -> fileService.New();
             case "SaveAs" -> fileService.saveAs();
             case "Save" -> fileService.save();
             case "Open" -> fileService.open();
             case "Exit" -> fileService.exit();
-            //edit
+            // edit
             case "Undo" -> editService.undo();
             case "Redo" -> editService.redo();
             case "Copy" -> editService.copy();
             case "Paste" -> editService.paste();
             case "Cut" -> editService.cut();
-            //format
+            // format
             case "Font..." -> formatService.font("Select Font", "Apply");
             case "Line Wrap" -> formatService.lineWrap();
-            //help
+            // help
             case "Contact" -> helpService.contact();
         }
     }
-
-    // GETTERS
 
     public JFrame getFrame() {
         return frame;

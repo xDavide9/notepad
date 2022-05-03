@@ -3,9 +3,10 @@ package com.xdavide9.configuration;
 import java.awt.*;
 import java.io.Serializable;
 
+//todo should be a record
 public class Configuration implements Serializable {
 
-    //this type holds the fields which need to be serialized
+    // this type holds the fields which need to be serialized
 
     private int x, y, width, height;
     private Font font;
@@ -13,6 +14,18 @@ public class Configuration implements Serializable {
 
     public boolean isSet() {
         return font != null;
+    }
+
+    @Override
+    public String toString() {
+        return "Configuration{" +
+                "x=" + x +
+                ", y=" + y +
+                ", width=" + width +
+                ", height=" + height +
+                ", font=" + font +
+                ", lineWrap=" + lineWrap +
+                '}';
     }
 
     // SETTERS

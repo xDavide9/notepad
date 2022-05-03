@@ -1,11 +1,13 @@
 package com.xdavide9.services;
 
 import com.xdavide9.gui.Gui;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
+@Slf4j
 public class EditService {
 
     private final Gui gui;
@@ -20,40 +22,36 @@ public class EditService {
     public void undo() {
         try {
             undoManager.undo();
-            System.out.println("Undid Correctly");
+            log.info("Successfully undid");
         } catch (CannotUndoException e) {
-            e.printStackTrace();
-            System.err.println("Nothing to undo");
+            log.error("Could not undo", e);
         }
     }
 
     public void redo() {
         try {
             undoManager.redo();
-            System.out.println("Redid Correctly");
+            log.info("Successfully redid");
         } catch (CannotRedoException e) {
-            e.printStackTrace();
-            System.err.println("Nothing to redo");
+            log.error("Could not redo", e);
         }
 
     }
 
     public void copy() {
         gui.getTextArea().copy();
-        System.out.println("Copied");
+        log.info("Successfully copy text");
     }
 
     public void paste() {
         gui.getTextArea().paste();
-        System.out.println("Pasted");
+        log.info("Successfully pasted text");
     }
 
     public void cut() {
         gui.getTextArea().cut();
-        System.out.println("Cut");
+        log.info("Successfully cut text");
     }
-
-    // GETTERS
 
     public UndoManager getUndoManager() {
         return undoManager;

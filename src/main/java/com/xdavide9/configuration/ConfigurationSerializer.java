@@ -1,7 +1,10 @@
 package com.xdavide9.configuration;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.*;
 
+@Slf4j
 public class ConfigurationSerializer {
 
     private final File file;
@@ -11,16 +14,16 @@ public class ConfigurationSerializer {
 
         try {
             if (file.getParentFile().mkdir())
-                System.out.println("Directory created");
+                log.info("Directory to hold configuration created");
             else
-                System.out.println("Directory already exists");
+                log.info("Directory to hold configuration already exists in memory");
 
             if (file.createNewFile())
-                System.out.println("File created");
+                log.info("File to hold configuration created");
             else
-                System.out.println("File already exists");
+                log.info("File to hold configuration already exists in memory");
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Could not create the file to hold configuration");
         }
     }
 
@@ -31,9 +34,8 @@ public class ConfigurationSerializer {
             out.writeObject(configuration);
             out.close();
             fileOut.close();
-            System.out.println("Serialized");
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Could not serialize", e);
         }
     }
 
@@ -44,14 +46,10 @@ public class ConfigurationSerializer {
             Configuration configuration = (Configuration) in.readObject();
             in.close();
             fileIn.close();
-            System.out.println("Deserialized");
             return configuration;
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            System.err.println("Run for the first Time: applying default values");
+            log.error("Could not deserialize", e);
         }
         return null;
     }
-
-    // GETTERS
 }

@@ -1,13 +1,14 @@
 package com.xdavide9.services;
 
-import com.xdavide9.BetterNotePad;
 import com.xdavide9.gui.Gui;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class FormatService {
 
     private final Gui gui;
@@ -21,11 +22,11 @@ public class FormatService {
         if (gui.getTextArea().getLineWrap()) {
             gui.getScrollPane().setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
             gui.getTextArea().setLineWrap(false);
-            System.out.println("Line wrap: " + gui.getTextArea().getLineWrap());
+            log.info("Line wrap = {}", gui.getTextArea().getLineWrap());
         } else {
             gui.getScrollPane().setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             gui.getTextArea().setLineWrap(true);
-            System.out.println("Line wrap: " + gui.getTextArea().getLineWrap());
+            log.info("Line wrap = {}", gui.getTextArea().getLineWrap());
         }
     }
 
@@ -39,12 +40,12 @@ public class FormatService {
         //font names
         String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
         JList<String> namesList = new JList<>(fonts);
-        namesList.setSelectedIndex(0);      //default selected font: the first in the list
+        namesList.setSelectedIndex(0);      // default selected font: the first in the list
 
         JScrollPane namesScrollPane = new JScrollPane(namesList);
         namesScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        //font styles
+        // font styles
         String[] styles = {"PLAIN", "BOLD", "ITALIC"};
         JList<String> stylesList = new JList<>(styles);
         stylesList.setSelectedIndex(0);     //default selected size: PLAIN
@@ -52,7 +53,7 @@ public class FormatService {
         JScrollPane stylesScrollPane = new JScrollPane(stylesList);
         stylesScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        //font sizes
+        // font sizes
         List<Integer> s = new ArrayList<>();
         for (int i = 8; i <= 96; i += 2)
             s.add(i);
@@ -63,20 +64,20 @@ public class FormatService {
         JScrollPane sizesScrollPane = new JScrollPane(sizesList);
         sizesScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        //button
+        // button
         JButton button = new JButton(buttonText);
         button.addActionListener(e -> {
             String fontName = namesList.getSelectedValue();
             int fontStyle = stylesList.getSelectedIndex();
-            //using index because styles (PLAIN, BOLD, ITALIC)
-            //and they are put in the same order as their value
+            // using index because styles (PLAIN, BOLD, ITALIC)
+            // and they are put in the same order as their value
             Integer fontSize = sizesList.getSelectedValue();
 
             //todo to be serialized
             //noinspection MagicConstant
             font = new Font(fontName, fontStyle, fontSize);
             gui.getTextArea().setFont(font);
-            System.out.println("Successfully set new Font: " + font);
+            log.info("Font = {}", font);
 
             frame.dispose();
         });
