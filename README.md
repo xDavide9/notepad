@@ -22,6 +22,6 @@ Inspired by Windows notepad, but better because it is dark themed
 
 ![userguide](./screenshots/1.png)
 
-<a href="https://www.freeiconspng.com/img/17522">Icon credits</a>
-
+<a href="https://www.freeiconspng.com/img/17522">Icon credits</a>  
+<a href="https://github.com/JFormDesigner/FlatLaf">Laf credits</a>
 > Author: xDavide9
