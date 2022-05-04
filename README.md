@@ -11,7 +11,7 @@ Inspired by Windows notepad, but better because it is dark themed
 
 <hr>
 
-![lorem](./screenshots/2.png)
+![lorem](readmepics/2.png)
 
 ### User Guide
 
@@ -20,7 +20,7 @@ Inspired by Windows notepad, but better because it is dark themed
 
 <hr>
 
-![userguide](./screenshots/1.png)
+![userguide](readmepics/1.png)
 
 <a href="https://www.freeiconspng.com/img/17522">Icon credits</a>  
 <a href="https://github.com/JFormDesigner/FlatLaf">Laf credits</a>
