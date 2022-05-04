@@ -71,9 +71,9 @@ public class Gui implements ActionListener {
     }
 
     public Image icon() {
-        if (Files.exists(Paths.get("Icon.png"))) {
+        if (Files.exists(Paths.get("src/main/resources/icon.png"))) {
             log.info("Icon provided");
-            return new ImageIcon("Icon.png").getImage();
+            return new ImageIcon("src/main/resources/icon.png").getImage();
         }
         log.info("No Icon provided");
         return null;
