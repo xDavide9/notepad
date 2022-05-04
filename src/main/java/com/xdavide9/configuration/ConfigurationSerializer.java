@@ -23,7 +23,7 @@ public class ConfigurationSerializer {
             else
                 log.info("File to hold configuration already exists in memory");
         } catch (IOException e) {
-            log.error("Could not create the file to hold configuration");
+            log.error("Could not create the file to hold configuration", e);
         }
     }
 

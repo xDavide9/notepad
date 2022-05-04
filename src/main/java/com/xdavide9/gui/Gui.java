@@ -1,6 +1,7 @@
 package com.xdavide9.gui;
 
 import com.xdavide9.services.*;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -13,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @Slf4j
+@Getter
 public class Gui implements ActionListener {
 
     private JFrame frame;
@@ -99,21 +101,5 @@ public class Gui implements ActionListener {
             // help
             case "Contact" -> helpService.contact();
         }
-    }
-
-    public JFrame getFrame() {
-        return frame;
-    }
-
-    public JTextArea getTextArea() {
-        return textArea;
-    }
-
-    public JScrollPane getScrollPane() {
-        return scrollPane;
-    }
-
-    public FileService getFileService() {
-        return fileService;
     }
 }

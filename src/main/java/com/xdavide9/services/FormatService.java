@@ -69,12 +69,7 @@ public class FormatService {
         button.addActionListener(e -> {
             String fontName = namesList.getSelectedValue();
             int fontStyle = stylesList.getSelectedIndex();
-            // using index because styles (PLAIN, BOLD, ITALIC)
-            // and they are put in the same order as their value
             Integer fontSize = sizesList.getSelectedValue();
-
-            //todo to be serialized
-            //noinspection MagicConstant
             font = new Font(fontName, fontStyle, fontSize);
             gui.getTextArea().setFont(font);
             log.info("Font = {}", font);
@@ -82,7 +77,6 @@ public class FormatService {
             frame.dispose();
         });
 
-        //adding to the frame
         GridBagConstraints gb = new GridBagConstraints();
         gb.insets = new Insets(8, 8, 8, 8);
         gb.gridx = 0;

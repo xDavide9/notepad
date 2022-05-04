@@ -10,25 +10,28 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Objects;
 
 @Slf4j
 public class BetterNotePad {
 
-    private static final String defaultFontFamily = "Segoe UI";
-    private static final String initialFileName = "Untitled";
     private ConfigurationSerializer configurationSerializer;
-    private static final String appName = "BetterNotePad";
     private Configuration configuration;
-    private static String fileToOpen;
     private Gui gui;
 
+    private static String pathToOpen;
+
+    public static final String APP_NAME = "BetterNotePad";
+    public static final String DEFAULT_FONT_FAMILY = "Segoe UI";
+    public static final String INITIAL_FILE_NAME = "Untitled";
+
     public static void main(String[] args) {
-        fileToOpen = fileToOpen(args);
+        pathToOpen = retrievePath(args);
         customizeLaf();
         SwingUtilities.invokeLater(BetterNotePad::new);
     }
 
-    private static String fileToOpen(String[] args) {
+    private static String retrievePath(String[] args) {
         try {
             return args[0];
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -51,48 +54,39 @@ public class BetterNotePad {
 
         UIManager.put("ScrollBar.showButtons", true);
         UIManager.put("ScrollBar.width", 12);
-        UIManager.put("defaultFont", new Font(BetterNotePad.defaultFontFamily, Font.PLAIN, 14));
+        UIManager.put("defaultFont", new Font(BetterNotePad.DEFAULT_FONT_FAMILY, Font.PLAIN, 14));
         log.info("Successfully set up and customized Look and Feel");
     }
 
     private BetterNotePad() {
         createGui();
-        open(fileToOpen);
+        if (Objects.nonNull(pathToOpen))
+            open(pathToOpen);
         saveConfiguration();
     }
 
-    //todo make configuration a record and improve with optionals
     private void createGui() {
         configurationSerializer = new ConfigurationSerializer();
-
         configuration = configurationSerializer.deserialize();
 
-        if (configuration == null)
-            configuration = new Configuration();
+        if (Objects.isNull(configuration))
+            configuration = new Configuration(BetterNotePad.INITIAL_FILE_NAME,
+                    0, 0, 970, 600,
+                    new Font(BetterNotePad.DEFAULT_FONT_FAMILY, Font.PLAIN, 22),
+                    true);
 
-        if (configuration.isSet()) {
-            gui = new Gui(BetterNotePad.initialFileName,
-                    configuration.getX(),
-                    configuration.getY(),
-                    configuration.getWidth(),
-                    configuration.getHeight(),
-                    configuration.getFont(),
-                    configuration.isLineWrap());
-            log.info("Successfully created Gui with saved Configuration = {}", configuration);
-            return;
-        }
+        gui = new Gui(BetterNotePad.INITIAL_FILE_NAME,
+                configuration.getX(),
+                configuration.getY(),
+                configuration.getWidth(),
+                configuration.getHeight(),
+                configuration.getFont(),
+                configuration.isLineWrap());
 
-        gui = new Gui(BetterNotePad.initialFileName, 0, 0, 970, 600,
-                new Font(BetterNotePad.defaultFontFamily, Font.PLAIN, 22), true);
-        log.info("Successfully created Gui with default configuration");
-
+        log.info("Successfully created Gui with configuration = {}", configuration);
     }
 
     private void open(String path) {
-        if (path == null) {
-            return;
-        }
-
         try {
             FileReader fileReader = new FileReader(path);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -106,9 +100,9 @@ public class BetterNotePad {
 
             StringBuilder builder = new StringBuilder(path);
             String fileName = builder.substring(builder.lastIndexOf("\\") + 1);
-            gui.getFrame().setTitle(fileName);
 
-            gui.getFileService().setPath(fileToOpen);
+            gui.getFrame().setTitle(fileName);
+            gui.getFileService().setPath(pathToOpen);
 
             log.info("Successfully opened file provided from the arguments");
         } catch (Exception e) {
@@ -128,13 +122,5 @@ public class BetterNotePad {
             configurationSerializer.serialize(configuration);
             log.info("Successfully saved configuration");
         }));
-    }
-
-    public static String getAppName() {
-        return appName;
-    }
-
-    public static String getInitialFileName() {
-        return initialFileName;
     }
 }

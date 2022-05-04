@@ -1,6 +1,7 @@
 package com.xdavide9.services;
 
 import com.xdavide9.gui.Gui;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.undo.CannotRedoException;
@@ -11,6 +12,8 @@ import javax.swing.undo.UndoManager;
 public class EditService {
 
     private final Gui gui;
+
+    @Getter
     private final UndoManager undoManager;
 
     public EditService(Gui gui, int undoManagerEditLimit) {
@@ -51,9 +54,5 @@ public class EditService {
     public void cut() {
         gui.getTextArea().cut();
         log.info("Successfully cut text");
-    }
-
-    public UndoManager getUndoManager() {
-        return undoManager;
     }
 }

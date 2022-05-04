@@ -2,6 +2,7 @@ package com.xdavide9.services;
 
 import com.xdavide9.BetterNotePad;
 import com.xdavide9.gui.Gui;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -18,11 +19,13 @@ public class FileService {
     private final Gui gui;
     private final String[] savingTabOptions;
     private final JFileChooser chooser = new JFileChooser();
-    private String fileName = BetterNotePad.getInitialFileName();
-    private String path = "";
+    private String fileName = BetterNotePad.INITIAL_FILE_NAME;
     private BufferedReader bufferedReader;
     private FileReader fileReader;
     private int choice;
+
+    @Setter
+    private String path = "";
 
     public FileService(Gui gui, String[] savingTabOptions) {
         this.gui = gui;
@@ -31,7 +34,7 @@ public class FileService {
 
     public void New() {
         path = "";
-        fileName = BetterNotePad.getInitialFileName();
+        fileName = BetterNotePad.INITIAL_FILE_NAME;
         gui.getTextArea().setText("");
         gui.getFrame().setTitle(fileName);
         log.info("Successfully created a new File");
@@ -142,7 +145,7 @@ public class FileService {
     private void showSavingTab(String[] options) {
         choice = JOptionPane.showOptionDialog(gui.getFrame(),
                 "Do you want to save before exiting?",
-                BetterNotePad.getAppName(),
+                BetterNotePad.APP_NAME,
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.WARNING_MESSAGE,
                 null,
@@ -194,11 +197,5 @@ public class FileService {
 
     private void eraseTextArea() {
         gui.getTextArea().setText("");
-    }
-
-    // GETTERS SETTERS
-
-    public void setPath(String path) {
-        this.path = path;
     }
 }

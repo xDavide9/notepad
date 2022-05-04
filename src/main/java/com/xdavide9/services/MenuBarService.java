@@ -1,5 +1,7 @@
 package com.xdavide9.services;
 
+import lombok.Getter;
+
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -8,6 +10,7 @@ import java.util.List;
 
 public class MenuBarService {
 
+    @Getter
     private final JMenuBar menuBar;
     private JMenu fileMenu, editMenu, formatMenu, helpMenu;
 
@@ -114,11 +117,5 @@ public class MenuBarService {
         contactItem.addActionListener(listener);
         contactItem.setActionCommand("Contact");
         helpMenu.add(contactItem);
-    }
-
-    // GETTERS
-
-    public JMenuBar getMenuBar() {
-        return menuBar;
     }
 }
