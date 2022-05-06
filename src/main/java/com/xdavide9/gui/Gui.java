@@ -10,8 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.Objects;
 
 @Slf4j
 @Getter
@@ -40,7 +39,7 @@ public class Gui implements ActionListener {
 
     private void createFrame(String title, int x, int y, int width, int height) {
         frame = new JFrame(title);
-        frame.setIconImage(icon()); //todo improve with optionals
+        frame.setIconImage(icon());
         frame.setBounds(x, y, width, height);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
@@ -71,11 +70,13 @@ public class Gui implements ActionListener {
     }
 
     public Image icon() {
-        if (Files.exists(Paths.get("src/main/resources/icon.png"))) {
-            log.info("Icon provided");
-            return new ImageIcon("src/main/resources/icon.png").getImage();
+        try {
+            Image img = new ImageIcon(Objects.requireNonNull(getClass().getResource("/icon.png"))).getImage();
+            log.info("Successfully set icon");
+            return img;
+        } catch (NullPointerException e) {
+            log.error("Could not set icon", e);
         }
-        log.info("No Icon provided");
         return null;
     }
 
