@@ -3,5 +3,5 @@ out/
 flatlaf-2.0.jar
 META-INF/
 .idea/
-*.xml
 target/
+dependency-reduced-pom.xml
