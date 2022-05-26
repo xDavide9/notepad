@@ -1,6 +1,6 @@
-package com.xdavide9.gui;
+package com.xdavide9.jnotepad.gui;
 
-import com.xdavide9.services.*;
+import com.xdavide9.jnotepad.services.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 

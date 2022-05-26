@@ -45,7 +45,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.xdavide9.JNotepad</mainClass>
+                            <mainClass>com.xdavide9.jnotepad.JNotepad</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -1,9 +1,9 @@
-package com.xdavide9;
+package com.xdavide9.jnotepad;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
-import com.xdavide9.configuration.Configuration;
-import com.xdavide9.configuration.ConfigurationSerializer;
-import com.xdavide9.gui.Gui;
+import com.xdavide9.jnotepad.configuration.Configuration;
+import com.xdavide9.jnotepad.configuration.ConfigurationSerializer;
+import com.xdavide9.jnotepad.gui.Gui;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;

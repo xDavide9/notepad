@@ -1,4 +1,4 @@
-package com.xdavide9.services;
+package com.xdavide9.jnotepad.services;
 
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-package com.xdavide9.configuration;
+package com.xdavide9.jnotepad.configuration;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
