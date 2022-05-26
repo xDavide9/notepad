@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.xdavide9</groupId>
-    <artifactId>BetterNotePad</artifactId>
-    <version>1.2</version>
+    <artifactId>JNotepad</artifactId>
+    <version>1.2.1</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -45,7 +45,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.xdavide9.BetterNotePad</mainClass>
+                            <mainClass>com.xdavide9.JNotepad</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

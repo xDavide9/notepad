@@ -1,6 +1,6 @@
 package com.xdavide9.services;
 
-import com.xdavide9.BetterNotePad;
+import com.xdavide9.JNotepad;
 import com.xdavide9.gui.Gui;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class FileService {
     private final Gui gui;
     private final String[] savingTabOptions;
     private final JFileChooser chooser = new JFileChooser();
-    private String fileName = BetterNotePad.INITIAL_FILE_NAME;
+    private String fileName = JNotepad.INITIAL_FILE_NAME;
     private BufferedReader bufferedReader;
     private FileReader fileReader;
     private int choice;
@@ -34,7 +34,7 @@ public class FileService {
 
     public void New() {
         path = "";
-        fileName = BetterNotePad.INITIAL_FILE_NAME;
+        fileName = JNotepad.INITIAL_FILE_NAME;
         gui.getTextArea().setText("");
         gui.getFrame().setTitle(fileName);
         log.info("Successfully created a new File");
@@ -145,7 +145,7 @@ public class FileService {
     private void showSavingTab(String[] options) {
         choice = JOptionPane.showOptionDialog(gui.getFrame(),
                 "Do you want to save before exiting?",
-                BetterNotePad.APP_NAME,
+                JNotepad.APP_NAME,
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.WARNING_MESSAGE,
                 null,

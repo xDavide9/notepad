@@ -13,7 +13,7 @@ import java.io.FileReader;
 import java.util.Objects;
 
 @Slf4j
-public class BetterNotePad {
+public class JNotepad {
 
     private ConfigurationSerializer configurationSerializer;
     private Configuration configuration;
@@ -28,7 +28,7 @@ public class BetterNotePad {
     public static void main(String[] args) {
         pathToOpen = retrievePath(args);
         customizeLaf();
-        SwingUtilities.invokeLater(BetterNotePad::new);
+        SwingUtilities.invokeLater(JNotepad::new);
     }
 
     private static String retrievePath(String[] args) {
@@ -54,11 +54,11 @@ public class BetterNotePad {
 
         UIManager.put("ScrollBar.showButtons", true);
         UIManager.put("ScrollBar.width", 12);
-        UIManager.put("defaultFont", new Font(BetterNotePad.DEFAULT_FONT_FAMILY, Font.PLAIN, 14));
+        UIManager.put("defaultFont", new Font(JNotepad.DEFAULT_FONT_FAMILY, Font.PLAIN, 14));
         log.info("Successfully set up and customized Look and Feel");
     }
 
-    private BetterNotePad() {
+    private JNotepad() {
         createGui();
         if (Objects.nonNull(pathToOpen))
             open(pathToOpen);
@@ -70,12 +70,12 @@ public class BetterNotePad {
         configuration = configurationSerializer.deserialize();
 
         if (Objects.isNull(configuration))
-            configuration = new Configuration(BetterNotePad.INITIAL_FILE_NAME,
+            configuration = new Configuration(JNotepad.INITIAL_FILE_NAME,
                     0, 0, 970, 600,
-                    new Font(BetterNotePad.DEFAULT_FONT_FAMILY, Font.PLAIN, 22),
+                    new Font(JNotepad.DEFAULT_FONT_FAMILY, Font.PLAIN, 22),
                     true);
 
-        gui = new Gui(BetterNotePad.INITIAL_FILE_NAME,
+        gui = new Gui(JNotepad.INITIAL_FILE_NAME,
                 configuration.getX(),
                 configuration.getY(),
                 configuration.getWidth(),
