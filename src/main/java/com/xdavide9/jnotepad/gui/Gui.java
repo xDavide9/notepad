@@ -71,7 +71,7 @@ public class Gui implements ActionListener {
 
     public Image icon() {
         try {
-            Image img = new ImageIcon(Objects.requireNonNull(getClass().getResource("/icon.png"))).getImage();
+            Image img = new ImageIcon(Objects.requireNonNull(getClass().getResource("/com/xdavide9/jnotepad/icon.png"))).getImage();
             log.info("Successfully set icon");
             return img;
         } catch (NullPointerException e) {
