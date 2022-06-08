@@ -17,7 +17,7 @@
 
 ### Features
 
-- Modern look thanks to _Flatlaf_
+- Modern look thanks to [_Flatlaf_](https://www.formdev.com/flatlaf/#:~:text=FlatLaf%20is%20a%20modern%20open,on%20Java%208%20or%20newer.)
 - Great package of functions
 - Entirely built with _JDK 17.0.1_ using the _Swing API_
 
