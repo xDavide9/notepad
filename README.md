@@ -6,13 +6,12 @@
 [![license](https://img.shields.io/github/license/xDavide9/JNotepad?color=red)](https://github.com/xDavide9/JNotepad)
 [![java version](https://img.shields.io/badge/Java-17-blue)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 [![version](https://img.shields.io/github/v/release/xDavide9/JNotepad?color=brightgreen)](https://github.com/xDavide9/JNotepad/releases)
-[![twitter](https://img.shields.io/twitter/follow/xDavide9_?label=%40xDavide9_&style=social)](https://twitter.com/xDavide9_)
 
 > Inspired by Windows 10 Notepad, but dark-themed
 
 ### Installation
 
-- Make sure you have [_Java 17_](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) or later installed and download the latest version of the _Jar_
+- Make sure you have [_Java 17_](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) or later installed and download the latest version of the [_Jar_](https://github.com/xDavide9/JNotepad/releases)
 - You can run the application with `java -jar JNotepad-<<version>>.jar`
 
 ### Features
