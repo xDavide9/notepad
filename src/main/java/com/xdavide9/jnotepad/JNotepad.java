@@ -8,8 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 @Slf4j
@@ -88,15 +89,7 @@ public class JNotepad {
 
     private void open(String path) {
         try {
-            FileReader fileReader = new FileReader(path);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-            String line;
-            while((line = bufferedReader.readLine()) != null)
-                gui.getTextArea().append(line + "\n");
-
-            fileReader.close();
-            bufferedReader.close();
+            gui.getTextArea().append(new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8));
 
             StringBuilder builder = new StringBuilder(path);
             String fileName = builder.substring(builder.lastIndexOf("\\") + 1);
