@@ -208,6 +208,7 @@ public class FileService {
     private void readContent() throws IOException {
         eraseTextArea();
         gui.getTextArea().append(new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8));
+        gui.getTextArea().setCaretPosition(0);
     }
 
     private void changeTitle() {

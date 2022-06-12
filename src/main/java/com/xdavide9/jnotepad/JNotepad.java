@@ -90,6 +90,7 @@ public class JNotepad {
     private void open(String path) {
         try {
             gui.getTextArea().append(new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8));
+            gui.getTextArea().setCaretPosition(0);
 
             StringBuilder builder = new StringBuilder(path);
             String fileName = builder.substring(builder.lastIndexOf("\\") + 1);
