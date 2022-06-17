@@ -1,18 +1,15 @@
 # JNotepad
 
 [![author](https://img.shields.io/badge/author-xDavide9-brightgreen)](https://github.com/xDavide9)
-[![total lines](https://img.shields.io/tokei/lines/github/xDavide9/JNotepad)](https://github.com/xDavide9/JNotepad)
-[![repo size](https://img.shields.io/github/repo-size/xDavide9/JNotepad?color=orange)](https://github.com/xDavide9/JNotepad)
 [![license](https://img.shields.io/github/license/xDavide9/JNotepad?color=red)](https://github.com/xDavide9/JNotepad)
 [![java version](https://img.shields.io/badge/Java-17-blue)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
-[![version](https://img.shields.io/github/v/release/xDavide9/JNotepad?color=brightgreen)](https://github.com/xDavide9/JNotepad/releases)
 
 > Inspired by Windows 10 Notepad, but dark-themed
 
 ### Installation
-
-- Make sure you have [_Java 17_](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) or later installed and download the latest version of the [_Jar_](https://github.com/xDavide9/JNotepad/releases)
-- You can run the application with `java -jar JNotepad-<<version>>.jar`
+- For Windows, you can install [JNotepad.exe](https://github.com/woodrow73/JNotepad/releases) as a standalone application
+- To run the [_Jar_](https://github.com/woodrow73/JNotepad/releases), make sure you have [_Java 17_](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) or later installed
+- You can run the application with `java -jar JNotepadFork-<<version>>.jar`
 
 ### Features
 
