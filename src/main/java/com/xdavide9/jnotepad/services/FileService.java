@@ -6,10 +6,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -165,10 +162,18 @@ public class FileService {
         }
     }
 
-    private String addExtension(String string) {
-        if (!hasExtension(string))
-            return string + ".txt";
-        return string;
+    /** If the current document open in JNotepad doesn't have a save file, and no extension is found,
+     *  then a .txt extension is automatically used
+     *
+     * @return the path field variable which is updated to have a .txt extension only if
+     *  1. no extension is found, and 2. the path doesn't exist on disk
+     */
+    private String updateExtension() {
+        if (!hasExtension(path) && !new File(path).exists()) {
+            path += ".txt";
+            return path;
+        }
+        return path;
     }
 
     /** Tests if a file path contains a file extension
@@ -200,7 +205,7 @@ public class FileService {
     }
 
     private void writeContent() throws IOException {
-        FileWriter writer = new FileWriter(addExtension(path));
+        FileWriter writer = new FileWriter(updateExtension());
         writer.write(gui.getTextArea().getText());
         writer.close();
     }
@@ -212,12 +217,12 @@ public class FileService {
     }
 
     private void changeTitle() {
-        StringBuilder builder = new StringBuilder(path);
-        fileName = addExtension(builder.substring(builder.lastIndexOf("\\") + 1));
+        fileName = new File(updateExtension()).getName();
         gui.getFrame().setTitle(fileName);
     }
 
     private void eraseTextArea() {
         gui.getTextArea().setText("");
     }
+
 }

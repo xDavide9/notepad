@@ -1,5 +1,6 @@
 package com.xdavide9.jnotepad.configuration;
 
+import com.xdavide9.jnotepad.JNotepad;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -10,7 +11,7 @@ public class ConfigurationSerializer {
     private final File file;
 
     public ConfigurationSerializer() {
-        file = new File(System.getenv("APPDATA") + "\\BetterNotePad\\serialized.ser");
+        file = new File(getAppDataDirectory() + File.separator + "BetterNotePad" + File.separator + "serialized-0.1.ser");
 
         try {
             if (file.getParentFile().mkdir())
@@ -40,16 +41,39 @@ public class ConfigurationSerializer {
     }
 
     public Configuration deserialize() {
-        try {
-            FileInputStream fileIn = new FileInputStream(file);
-            ObjectInputStream in = new ObjectInputStream(fileIn);
+        if(file.length() == 0) {
+            log.info("Config file is empty, skipping deserialization");
+            return null;
+        }
+
+        try(FileInputStream fileIn = new FileInputStream(file); ObjectInputStream in = new ObjectInputStream(fileIn)) {
             Configuration configuration = (Configuration) in.readObject();
-            in.close();
-            fileIn.close();
             return configuration;
         } catch (IOException | ClassNotFoundException e) {
             log.error("Could not deserialize", e);
         }
         return null;
+    }
+
+    /** Gets the path to the app data directory (cross-platform)
+     *
+     * @return path to the app data directory; if the directory is not found, the local directory is returned
+     */
+    public String getAppDataDirectory() {
+        String workingDirectory = "";
+        switch(JNotepad.os) {
+            case WINDOWS -> workingDirectory = System.getenv("AppData");
+            case MAC -> workingDirectory = System.getProperty("user.home") + "/Library/Application Support";
+            case LINUX -> workingDirectory = System.getProperty("user.home");
+        }
+        //in case the directory doesn't exist, return the local directory
+        if(new File(workingDirectory).exists()) {
+            return workingDirectory;
+        }
+        else {
+            String localDirectory = new File("").getAbsoluteFile().getAbsolutePath();
+            log.info("App Data directory was not found, using local directory \'" + localDirectory + "\' instead");
+            return localDirectory;
+        }
     }
 }

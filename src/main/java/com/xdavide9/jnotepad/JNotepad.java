@@ -4,7 +4,9 @@ import com.formdev.flatlaf.FlatDarculaLaf;
 import com.xdavide9.jnotepad.configuration.Configuration;
 import com.xdavide9.jnotepad.configuration.ConfigurationSerializer;
 import com.xdavide9.jnotepad.gui.Gui;
+import com.xdavide9.jnotepad.util.OperatingSystem;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.SystemUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,8 +18,10 @@ import java.util.Objects;
 @Slf4j
 public class JNotepad {
 
+    public static OperatingSystem os;
+
+    public static Configuration configuration;
     private ConfigurationSerializer configurationSerializer;
-    private Configuration configuration;
     private Gui gui;
 
     private static String pathToOpen;
@@ -27,6 +31,9 @@ public class JNotepad {
     public static final String INITIAL_FILE_NAME = "Untitled";
 
     public static void main(String[] args) {
+        os = SystemUtils.IS_OS_WINDOWS ? OperatingSystem.WINDOWS :
+                SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_MAC_OSX ? OperatingSystem.MAC :
+                        OperatingSystem.LINUX;
         pathToOpen = retrievePath(args);
         customizeLaf();
         SwingUtilities.invokeLater(JNotepad::new);

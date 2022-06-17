@@ -55,4 +55,9 @@ public class EditService {
         gui.getTextArea().cut();
         log.info("Successfully cut text");
     }
+
+    public void find() {
+        gui.getFindFrame().openFindWindow();
+        log.info("Opened Find window");
+    }
 }
