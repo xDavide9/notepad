@@ -25,7 +25,7 @@
     - `File` allows to interact with the file system
     - `Edit` is useful when writing to save time
     - `Format` displays the text in a preferred way
-    - `Help` points to **xDavide9#1490** on _Discord_
+    - `Help` links to both the original repository, and to this forked repository
 
 ![userguide](readmepics/1.png)
 
