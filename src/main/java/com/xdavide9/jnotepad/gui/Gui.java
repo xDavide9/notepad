@@ -6,10 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.Objects;
 
 @Slf4j
@@ -25,14 +22,18 @@ public class Gui implements ActionListener {
     private final FormatService formatService;
     private final HelpService helpService;
 
+    private Find findFrame;
+
     public Gui(String title, int x, int y, int width, int height, Font font, boolean lineWrap) {
+        createFrame(title, x, y, width, height);
+        createTextArea(font, lineWrap);
+
         fileService = new FileService(this, new String[]{"Save", "Don't Save", "Cancel"});
         editService = new EditService(this, 1000);
         formatService = new FormatService(this);
         helpService = new HelpService(this);
 
-        createFrame(title, x, y, width, height);
-        createTextArea(font, lineWrap);
+        findFrame = new Find(this, textArea, icon());
 
         frame.setVisible(true);
     }
@@ -51,6 +52,8 @@ public class Gui implements ActionListener {
 
         frame.setJMenuBar(new MenuBarService(this).getMenuBar());
     }
+
+
 
     private void createTextArea(Font font, boolean lineWrap) {
         textArea = new JTextArea();
@@ -96,11 +99,13 @@ public class Gui implements ActionListener {
             case "Copy" -> editService.copy();
             case "Paste" -> editService.paste();
             case "Cut" -> editService.cut();
+            case "Find..." -> editService.find();
             // format
-            case "Font..." -> formatService.font("Select Font", "Apply");
+            case "Font..." -> formatService.font();
             case "Line Wrap" -> formatService.lineWrap();
             // help
             case "Contact" -> helpService.contact();
         }
     }
+
 }

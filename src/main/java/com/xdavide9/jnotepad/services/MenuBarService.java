@@ -14,7 +14,11 @@ public class MenuBarService {
     private final JMenuBar menuBar;
     private JMenu fileMenu, editMenu, formatMenu, helpMenu;
 
+    /** Key used for shortcuts */
+    int shortcutKey;
+
     public MenuBarService(ActionListener listener) {
+        shortcutKey = KeyEvent.CTRL_DOWN_MASK;
         menuBar = new JMenuBar();
 
         createMenus();
@@ -41,25 +45,25 @@ public class MenuBarService {
         JMenuItem newItem = new JMenuItem("New");
         newItem.addActionListener(listener);
         newItem.setActionCommand("New");
-        newItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
+        newItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, shortcutKey));
         fileMenu.add(newItem);
 
         JMenuItem openItem = new JMenuItem("Open");
         openItem.addActionListener(listener);
         openItem.setActionCommand("Open");
-        openItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
+        openItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, shortcutKey));
         fileMenu.add(openItem);
 
         JMenuItem saveItem = new JMenuItem("Save");
         saveItem.addActionListener(listener);
         saveItem.setActionCommand("Save");
-        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
+        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, shortcutKey));
         fileMenu.add(saveItem);
 
         JMenuItem saveAsItem = new JMenuItem("Save As");
         saveAsItem.addActionListener(listener);
         saveAsItem.setActionCommand("SaveAs");
-        saveAsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,  KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK));
+        saveAsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,  shortcutKey | KeyEvent.SHIFT_DOWN_MASK));
         fileMenu.add(saveAsItem);
 
         JMenuItem exitItem = new JMenuItem("Exit");
@@ -72,32 +76,38 @@ public class MenuBarService {
         JMenuItem undoItem = new JMenuItem("Undo");
         undoItem.addActionListener(listener);
         undoItem.setActionCommand("Undo");
-        undoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK));
+        undoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, shortcutKey));
         editMenu.add(undoItem);
 
         JMenuItem redoItem = new JMenuItem("Redo");
         redoItem.addActionListener(listener);
         redoItem.setActionCommand("Redo");
-        redoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK));
+        redoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, shortcutKey));
         editMenu.add(redoItem);
 
         JMenuItem copyItem = new JMenuItem("Copy");
         copyItem.addActionListener(listener);
         copyItem.setActionCommand("Copy");
-        copyItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK));
+        copyItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, shortcutKey));
         editMenu.add(copyItem);
 
         JMenuItem pasteItem = new JMenuItem("Paste");
         pasteItem.addActionListener(listener);
         pasteItem.setActionCommand("Paste");
-        pasteItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK));
+        pasteItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, shortcutKey));
         editMenu.add(pasteItem);
 
         JMenuItem cutItem = new JMenuItem("Cut");
         cutItem.addActionListener(listener);
         cutItem.setActionCommand("Cut");
-        cutItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK));
+        cutItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, shortcutKey));
         editMenu.add(cutItem);
+
+        JMenuItem findItem = new JMenuItem("Find...");
+        findItem.addActionListener(listener);
+        findItem.setActionCommand("Find...");
+        findItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, shortcutKey));
+        editMenu.add(findItem);
     }
 
     private void createFormatItems(ActionListener listener) {

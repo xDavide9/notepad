@@ -6,10 +6,10 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,7 +94,6 @@ public class FileService {
     public void exit() {
         /*
             4 possibilities:
-
             1) no path in memory and blank text                        -->  just exit
             2) no path in memory and some text written                 -->  ask whether to save
             3) path stored in memory and no differences to be saved    -->  just exit
@@ -163,39 +162,67 @@ public class FileService {
         }
     }
 
-    private String addExtension(String string) {
-        if (!string.endsWith(".txt"))
-            return string + ".txt";
-        return string;
+    /** If the current document open in JNotepad doesn't have a save file, and no extension is found,
+     *  then a .txt extension is automatically used
+     *
+     * @return the path field variable which is updated to have a .txt extension only if
+     *  1. no extension is found, and 2. the path doesn't exist on disk
+     */
+    private String updateExtension() {
+        if (!hasExtension(path) && !new File(path).exists()) {
+            path += ".txt";
+            return path;
+        }
+        return path;
+    }
+
+    /** Tests if a file path contains a file extension
+     *
+     * @param filePath path to a file
+     * @return whether the file path contains a file extension
+     */
+    private boolean hasExtension(String filePath) {
+        return getExtension(filePath).length() != 0;
+    }
+
+    /** Gets the extension from a path
+     *
+     * @param filePath path to a file
+     * @return the extension of the file (including the '.') - if no extension is found, an
+     *      empty String is returned
+     */
+    private String getExtension(String filePath) {
+        String extension = "";
+
+        int lastDot = filePath.lastIndexOf('.');
+        int lastFileSeparator = Math.max(filePath.lastIndexOf('/'), filePath.lastIndexOf('\\'));
+
+        if (lastDot > lastFileSeparator && lastDot != filePath.length() - 1) {
+            extension = filePath.substring(lastDot);
+        }
+
+        return extension;
     }
 
     private void writeContent() throws IOException {
-        FileWriter writer = new FileWriter(addExtension(path));
+        FileWriter writer = new FileWriter(updateExtension());
         writer.write(gui.getTextArea().getText());
         writer.close();
     }
 
     private void readContent() throws IOException {
         eraseTextArea();
-
-        fileReader = new FileReader(path);
-        bufferedReader = new BufferedReader(fileReader);
-
-        String line;
-        while((line = bufferedReader.readLine()) != null)
-            gui.getTextArea().append(line + "\n");
-
-        fileReader.close();
-        bufferedReader.close();
+        gui.getTextArea().append(new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8));
+        gui.getTextArea().setCaretPosition(0);
     }
 
     private void changeTitle() {
-        StringBuilder builder = new StringBuilder(path);
-        fileName = addExtension(builder.substring(builder.lastIndexOf("\\") + 1));
+        fileName = new File(updateExtension()).getName();
         gui.getFrame().setTitle(fileName);
     }
 
     private void eraseTextArea() {
         gui.getTextArea().setText("");
     }
+
 }

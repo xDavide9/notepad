@@ -1,11 +1,13 @@
 package com.xdavide9.jnotepad.services;
 
+import com.xdavide9.jnotepad.JNotepad;
 import com.xdavide9.jnotepad.gui.Gui;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Slf4j
@@ -13,37 +15,43 @@ public class FormatService {
 
     private final Gui gui;
     private Font font;
+    private JFrame frame;
+    private JList<String> namesList;
+    private DefaultListModel<String> namesListModel;
+    private JScrollPane namesScrollPane;
+
+    private String[] fonts;
+    /** Links HTML stylized font names (to be used in a JList) to each font name */
+    private LinkedHashMap<String, String> htmlToFont;
 
     public FormatService(Gui gui) {
         this.gui = gui;
-    }
-
-    public void lineWrap() {
-        if (gui.getTextArea().getLineWrap()) {
-            gui.getScrollPane().setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-            gui.getTextArea().setLineWrap(false);
-            log.info("Line wrap = {}", gui.getTextArea().getLineWrap());
-        } else {
-            gui.getScrollPane().setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-            gui.getTextArea().setLineWrap(true);
-            log.info("Line wrap = {}", gui.getTextArea().getLineWrap());
-        }
-    }
-
-    public void font(String title, String buttonText) {
-        JFrame frame = new JFrame(title);
+        frame = new JFrame("Select Font");
         frame.setLocationRelativeTo(gui.getFrame());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setIconImage(gui.icon());
         frame.setLayout(new GridBagLayout());
 
-        //font names
-        String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-        JList<String> namesList = new JList<>(fonts);
-        namesList.setSelectedIndex(0);      // default selected font: the first in the list
+        font = JNotepad.configuration.getFont();
 
-        JScrollPane namesScrollPane = new JScrollPane(namesList);
+        //font names
+        fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+
+        htmlToFont = new LinkedHashMap<>();
+        for (int i = 0; i < fonts.length; i++) {
+            htmlToFont.put(fontNameToHTML(fonts[i]), fonts[i]);
+        }
+
+        namesListModel = new DefaultListModel<>();
+        namesListModel.addAll(htmlToFont.keySet().stream().toList());
+
+        //display the HTML in the JList
+        namesList = new JList<>(namesListModel);
+
+        namesScrollPane = new JScrollPane(namesList);
         namesScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        namesScrollPane.setPreferredSize(new Dimension((int)namesScrollPane.getPreferredSize().getWidth(), 184));
+        moveCurrentFontToTopJList(true);
 
         // font styles
         String[] styles = {"PLAIN", "BOLD", "ITALIC"};
@@ -65,16 +73,21 @@ public class FormatService {
         sizesScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         // button
-        JButton button = new JButton(buttonText);
+        JButton button = new JButton("Apply");
         button.addActionListener(e -> {
-            String fontName = namesList.getSelectedValue();
+            String fontName = htmlToFont.get(namesList.getSelectedValue());
             int fontStyle = stylesList.getSelectedIndex();
             Integer fontSize = sizesList.getSelectedValue();
             font = new Font(fontName, fontStyle, fontSize);
             gui.getTextArea().setFont(font);
             log.info("Font = {}", font);
 
-            frame.dispose();
+            frame.setVisible(false);
+
+            reOrderTopJListFont();
+            moveCurrentFontToTopJList(true);
+
+            log.info("button press font: "+font.getName()+"|"+namesList.getSelectedValue());
         });
 
         GridBagConstraints gb = new GridBagConstraints();
@@ -91,7 +104,77 @@ public class FormatService {
         frame.add(button, gb);
 
         frame.pack();
-        frame.setVisible(true);
+    }
+
+    public void lineWrap() {
+        if (gui.getTextArea().getLineWrap()) {
+            gui.getScrollPane().setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+            gui.getTextArea().setLineWrap(false);
+            log.info("Line wrap = {}", gui.getTextArea().getLineWrap());
+        } else {
+            gui.getScrollPane().setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            gui.getTextArea().setLineWrap(true);
+            log.info("Line wrap = {}", gui.getTextArea().getLineWrap());
+        }
+    }
+
+    public void font() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (!frame.isVisible()) {
+                    frame.setLocationRelativeTo(gui.getFrame());
+                    frame.setVisible(true);
+                }
+                frame.requestFocus();
+            }
+        });
+    }
+
+    /** Moves the first font inside the namesList JList back to its initial location (the order of fonts that was set by
+     * GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()) */
+    private void reOrderTopJListFont() {
+        String formerTopElement = (String)namesListModel.remove(0);
+
+        int iterator = 0;
+        for(String key : htmlToFont.keySet()) {
+            if(key.equals(formerTopElement)) {
+                namesListModel.insertElementAt(formerTopElement, iterator);
+                break;
+            }
+            iterator++;
+        }
+    }
+
+    /** Inside the namesList JList, moves the font currently used by Gui.textArea to the top
+     *
+     * @param scrollAndSelectCurrentFont whether the font moved to the top of the JList should be scrolled to and selected
+     */
+    private void moveCurrentFontToTopJList(boolean scrollAndSelectCurrentFont) {
+        namesListModel.insertElementAt(fontNameToHTML(font.getName()), 0);
+
+        for(int i = 1; i < namesListModel.size(); i++) {
+
+            //delete where the new font is inside the JList
+            if(((String)namesListModel.get(i)).equals(fontNameToHTML(font.getName()))) {
+                namesListModel.remove(i);
+                break;
+            }
+        }
+
+        if(scrollAndSelectCurrentFont) {
+            namesScrollPane.getVerticalScrollBar().setValue(0);
+            namesList.setSelectedIndex(0);
+        }
+    }
+
+    /** Converts a font name into HTML that applies the font, and displays the font name
+     *
+     * @param fontName the name of a font
+     * @return HTML that applies the font, and displays the font name
+     */
+    private String fontNameToHTML(String fontName) {
+        return "<html><font face=\"" + fontName + "\">" + fontName + "</font></html>";
     }
 
 }
