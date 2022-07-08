@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -20,8 +19,6 @@ public class FileService {
     private final String[] savingTabOptions;
     private final JFileChooser chooser = new JFileChooser();
     private String fileName = JNotepad.INITIAL_FILE_NAME;
-    private BufferedReader bufferedReader;
-    private FileReader fileReader;
     private int choice;
 
     @Setter
@@ -124,8 +121,8 @@ public class FileService {
         List<String> fileLines = new ArrayList<>();
 
         try {
-            fileReader = new FileReader(path);
-            bufferedReader = new BufferedReader(fileReader);
+            FileReader fileReader = new FileReader(path);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
 
             String line;
             while((line = bufferedReader.readLine()) != null)
@@ -177,7 +174,6 @@ public class FileService {
     }
 
     /** Tests if a file path contains a file extension
-     *
      * @param filePath path to a file
      * @return whether the file path contains a file extension
      */
@@ -186,7 +182,6 @@ public class FileService {
     }
 
     /** Gets the extension from a path
-     *
      * @param filePath path to a file
      * @return the extension of the file (including the '.') - if no extension is found, an
      *      empty String is returned
@@ -212,7 +207,7 @@ public class FileService {
 
     private void readContent() throws IOException {
         eraseTextArea();
-        gui.getTextArea().append(new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8));
+        gui.getTextArea().append(Files.readString(Paths.get(path)));
         gui.getTextArea().setCaretPosition(0);
     }
 

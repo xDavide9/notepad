@@ -47,8 +47,7 @@ public class ConfigurationSerializer {
         }
 
         try(FileInputStream fileIn = new FileInputStream(file); ObjectInputStream in = new ObjectInputStream(fileIn)) {
-            Configuration configuration = (Configuration) in.readObject();
-            return configuration;
+            return (Configuration) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             log.error("Could not deserialize", e);
         }
@@ -72,7 +71,7 @@ public class ConfigurationSerializer {
         }
         else {
             String localDirectory = new File("").getAbsoluteFile().getAbsolutePath();
-            log.info("App Data directory was not found, using local directory \'" + localDirectory + "\' instead");
+            log.info("App Data directory was not found, using local directory '" + localDirectory + "' instead");
             return localDirectory;
         }
     }

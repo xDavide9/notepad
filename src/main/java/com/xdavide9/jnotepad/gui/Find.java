@@ -6,8 +6,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
@@ -19,14 +17,13 @@ public class Find {
 
     private JDialog frame;
 
-    private JPanel contentPane;
     private JTextField searchTextField;
     private JButton findNext;
-    private JRadioButton upRadioButton, downRadioButton;
+    private JRadioButton upRadioButton;
     private JCheckBox matchCase, wrap;
 
-    private Gui gui;
-    private JTextArea textArea;
+    private final Gui gui;
+    private final JTextArea textArea;
 
     /** stores the caret's index at the start of JNotepad's selected text */
     private int caretPositionMark = 0;
@@ -37,12 +34,9 @@ public class Find {
     public Find(Gui gui, JTextArea textArea, Image icon) {
         this.gui = gui;
         this.textArea = textArea;
-        textArea.addCaretListener(new CaretListener() {
-            @Override
-            public void caretUpdate(CaretEvent e) {
-                Find.this.caretPositionMark = e.getMark();
-                Find.this.caretPositionDot = e.getDot();
-            }
+        textArea.addCaretListener(e -> {
+            Find.this.caretPositionMark = e.getMark();
+            Find.this.caretPositionDot = e.getDot();
         });
 
         createFrame(icon);
@@ -54,7 +48,7 @@ public class Find {
         frame.setIconImage(icon);
         frame.setResizable(false);
         frame.setBounds(100, 100, 392, 181);
-        contentPane = new JPanel();
+        JPanel contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         frame.setContentPane(contentPane);
         contentPane.setLayout(null);
@@ -74,12 +68,7 @@ public class Find {
         JButton cancel = new JButton("Cancel");
         cancel.setFont(new Font(JNotepad.DEFAULT_FONT_FAMILY, Font.PLAIN, 12));
         cancel.setBounds(262, 40, 100, 28);
-        cancel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Find.this.frame.setVisible(false);
-            }
-        });
+        cancel.addActionListener(e -> Find.this.frame.setVisible(false));
         contentPane.add(cancel);
 
         searchTextField = new JTextField();
@@ -117,26 +106,17 @@ public class Find {
             public void insertUpdate(DocumentEvent e) { updateButton(); }
 
             public void updateButton() {
-                if(searchTextField.getText().length() == 0)
-                    findNext.setEnabled(false);
-                else
-                    findNext.setEnabled(true);
+                findNext.setEnabled(searchTextField.getText().length() != 0);
             }
         });
 
         //click the 'Find Next' button when enter key is pressed in the JTextField
-        searchTextField.addKeyListener(new KeyListener() {
+        searchTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_ENTER)
                     findNext.doClick();
             }
-
-            @Override
-            public void keyTyped(KeyEvent e) {}
-
-            @Override
-            public void keyReleased(KeyEvent e) {}
         });
 
         JPanel directionPanel = new JPanel();
@@ -157,7 +137,7 @@ public class Find {
         directionPanel.add(upRadioButton);
         bg.add(upRadioButton);
 
-        downRadioButton = new JRadioButton("Down");
+        JRadioButton downRadioButton = new JRadioButton("Down");
         downRadioButton.setFont(new Font(JNotepad.DEFAULT_FONT_FAMILY, Font.PLAIN, 11));
         downRadioButton.setBounds(58, 19, 72, 23);
         downRadioButton.setSelected(true);
@@ -183,12 +163,7 @@ public class Find {
             frame.setVisible(true);
         }
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                searchTextField.requestFocus();
-            }
-        });
+        SwingUtilities.invokeLater(() -> searchTextField.requestFocus());
     }
 
     /** When the 'Find Next' button is clicked, the text specified inside searchTextField
@@ -205,23 +180,20 @@ public class Find {
             String findText = matchCase.isSelected() ? searchTextField.getText() : searchTextField.getText().toLowerCase(Locale.ROOT);
 
             //the index inside notepadText where the next occurrence of findText is found; will be -1 if not found
-            int nextIndex = -1;
+            int nextIndex;
 
             if(wrap.isSelected()) {
                 if(upRadioButton.isSelected()) {
                     String aboveText = notepadText.substring(0, caretPositionMark);
                     nextIndex = aboveText.contains(findText) ? aboveText.lastIndexOf(findText) : notepadText.lastIndexOf(findText);
-                }
-                else { //down radio button is selected
+                } else { //down radio button is selected
                     String belowText = notepadText.substring(caretPositionDot);
                     nextIndex = belowText.contains(findText) ? belowText.indexOf(findText) + caretPositionDot : notepadText.indexOf(findText);
                 }
-            }
-            else { //wrap isn't selected
+            } else { //wrap isn't selected
                 if(upRadioButton.isSelected()) {
                     nextIndex = notepadText.substring(0, caretPositionMark).lastIndexOf(findText);
-                }
-                else { //down radio button is selected
+                } else { //down radio button is selected
                     String belowText = notepadText.substring(caretPositionDot);
                     nextIndex = belowText.contains(findText) ? belowText.indexOf(findText) + caretPositionDot : -1;
                 }
@@ -230,8 +202,7 @@ public class Find {
             if(nextIndex == -1) {
                 JOptionPane.showMessageDialog(gui.getFrame(), "Cannot find \"" + searchTextField.getText() + "\"",
                         "JNotepad", JOptionPane.INFORMATION_MESSAGE);
-            }
-            else {
+            } else {
                 textArea.setSelectionStart(nextIndex);
                 textArea.setSelectionEnd(nextIndex + findText.length());
             }

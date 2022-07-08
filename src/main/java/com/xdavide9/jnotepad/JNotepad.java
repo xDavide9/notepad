@@ -10,7 +10,6 @@ import org.apache.commons.lang3.SystemUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -96,7 +95,7 @@ public class JNotepad {
 
     private void open(String path) {
         try {
-            gui.getTextArea().append(new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8));
+            gui.getTextArea().append(Files.readString(Paths.get(path)));
             gui.getTextArea().setCaretPosition(0);
 
             StringBuilder builder = new StringBuilder(path);

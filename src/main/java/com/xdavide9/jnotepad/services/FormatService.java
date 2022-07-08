@@ -15,14 +15,13 @@ public class FormatService {
 
     private final Gui gui;
     private Font font;
-    private JFrame frame;
-    private JList<String> namesList;
-    private DefaultListModel<String> namesListModel;
-    private JScrollPane namesScrollPane;
+    private final JFrame frame;
+    private final JList<String> namesList;
+    private final DefaultListModel<String> namesListModel;
+    private final JScrollPane namesScrollPane;
 
-    private String[] fonts;
     /** Links HTML stylized font names (to be used in a JList) to each font name */
-    private LinkedHashMap<String, String> htmlToFont;
+    private final LinkedHashMap<String, String> htmlToFont;
 
     public FormatService(Gui gui) {
         this.gui = gui;
@@ -35,11 +34,11 @@ public class FormatService {
         font = JNotepad.configuration.getFont();
 
         //font names
-        fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+        String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 
         htmlToFont = new LinkedHashMap<>();
-        for (int i = 0; i < fonts.length; i++) {
-            htmlToFont.put(fontNameToHTML(fonts[i]), fonts[i]);
+        for (String value : fonts) {
+            htmlToFont.put(fontNameToHTML(value), value);
         }
 
         namesListModel = new DefaultListModel<>();
@@ -51,7 +50,7 @@ public class FormatService {
         namesScrollPane = new JScrollPane(namesList);
         namesScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         namesScrollPane.setPreferredSize(new Dimension((int)namesScrollPane.getPreferredSize().getWidth(), 184));
-        moveCurrentFontToTopJList(true);
+        moveCurrentFontToTopJList();
 
         // font styles
         String[] styles = {"PLAIN", "BOLD", "ITALIC"};
@@ -85,7 +84,7 @@ public class FormatService {
             frame.setVisible(false);
 
             reOrderTopJListFont();
-            moveCurrentFontToTopJList(true);
+            moveCurrentFontToTopJList();
 
             log.info("button press font: "+font.getName()+"|"+namesList.getSelectedValue());
         });
@@ -119,22 +118,19 @@ public class FormatService {
     }
 
     public void font() {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                if (!frame.isVisible()) {
-                    frame.setLocationRelativeTo(gui.getFrame());
-                    frame.setVisible(true);
-                }
-                frame.requestFocus();
+        SwingUtilities.invokeLater(() -> {
+            if (!frame.isVisible()) {
+                frame.setLocationRelativeTo(gui.getFrame());
+                frame.setVisible(true);
             }
+            frame.requestFocus();
         });
     }
 
     /** Moves the first font inside the namesList JList back to its initial location (the order of fonts that was set by
      * GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()) */
     private void reOrderTopJListFont() {
-        String formerTopElement = (String)namesListModel.remove(0);
+        String formerTopElement = namesListModel.remove(0);
 
         int iterator = 0;
         for(String key : htmlToFont.keySet()) {
@@ -146,26 +142,23 @@ public class FormatService {
         }
     }
 
-    /** Inside the namesList JList, moves the font currently used by Gui.textArea to the top
-     *
-     * @param scrollAndSelectCurrentFont whether the font moved to the top of the JList should be scrolled to and selected
+    /**
+     * Inside the namesList JList, moves the font currently used by Gui.textArea to the top
      */
-    private void moveCurrentFontToTopJList(boolean scrollAndSelectCurrentFont) {
+    private void moveCurrentFontToTopJList() {
         namesListModel.insertElementAt(fontNameToHTML(font.getName()), 0);
 
         for(int i = 1; i < namesListModel.size(); i++) {
 
             //delete where the new font is inside the JList
-            if(((String)namesListModel.get(i)).equals(fontNameToHTML(font.getName()))) {
+            if(namesListModel.get(i).equals(fontNameToHTML(font.getName()))) {
                 namesListModel.remove(i);
                 break;
             }
         }
 
-        if(scrollAndSelectCurrentFont) {
-            namesScrollPane.getVerticalScrollBar().setValue(0);
-            namesList.setSelectedIndex(0);
-        }
+        namesScrollPane.getVerticalScrollBar().setValue(0);
+        namesList.setSelectedIndex(0);
     }
 
     /** Converts a font name into HTML that applies the font, and displays the font name

@@ -22,7 +22,7 @@ public class Gui implements ActionListener {
     private final FormatService formatService;
     private final HelpService helpService;
 
-    private Find findFrame;
+    private final Find findFrame;
 
     public Gui(String title, int x, int y, int width, int height, Font font, boolean lineWrap) {
         createFrame(title, x, y, width, height);
@@ -52,8 +52,6 @@ public class Gui implements ActionListener {
 
         frame.setJMenuBar(new MenuBarService(this).getMenuBar());
     }
-
-
 
     private void createTextArea(Font font, boolean lineWrap) {
         textArea = new JTextArea();
