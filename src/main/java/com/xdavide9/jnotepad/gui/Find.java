@@ -93,7 +93,7 @@ public class Find {
                         BorderFactory.createEmptyBorder(1, 6, 2, 4)));
             }
         });
-        //disable the 'Find Next' button if the text field is empty
+        // disable the 'Find Next' button if the text field is empty
         searchTextField.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
@@ -110,7 +110,7 @@ public class Find {
             }
         });
 
-        //click the 'Find Next' button when enter key is pressed in the JTextField
+        // click the 'Find Next' button when enter key is pressed in the JTextField
         searchTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -179,21 +179,21 @@ public class Find {
             String notepadText = matchCase.isSelected() ? textArea.getText() : textArea.getText().toLowerCase(Locale.ROOT);
             String findText = matchCase.isSelected() ? searchTextField.getText() : searchTextField.getText().toLowerCase(Locale.ROOT);
 
-            //the index inside notepadText where the next occurrence of findText is found; will be -1 if not found
+            // the index inside notepadText where the next occurrence of findText is found; will be -1 if not found
             int nextIndex;
 
             if(wrap.isSelected()) {
                 if(upRadioButton.isSelected()) {
                     String aboveText = notepadText.substring(0, caretPositionMark);
                     nextIndex = aboveText.contains(findText) ? aboveText.lastIndexOf(findText) : notepadText.lastIndexOf(findText);
-                } else { //down radio button is selected
+                } else { // down radio button is selected
                     String belowText = notepadText.substring(caretPositionDot);
                     nextIndex = belowText.contains(findText) ? belowText.indexOf(findText) + caretPositionDot : notepadText.indexOf(findText);
                 }
-            } else { //wrap isn't selected
+            } else { // wrap isn't selected
                 if(upRadioButton.isSelected()) {
                     nextIndex = notepadText.substring(0, caretPositionMark).lastIndexOf(findText);
-                } else { //down radio button is selected
+                } else { // down radio button is selected
                     String belowText = notepadText.substring(caretPositionDot);
                     nextIndex = belowText.contains(findText) ? belowText.indexOf(findText) + caretPositionDot : -1;
                 }
