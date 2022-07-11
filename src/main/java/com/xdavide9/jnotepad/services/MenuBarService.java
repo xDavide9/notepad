@@ -1,5 +1,7 @@
 package com.xdavide9.jnotepad.services;
 
+import com.xdavide9.jnotepad.JNotepad;
+import com.xdavide9.jnotepad.util.OperatingSystem;
 import lombok.Getter;
 
 import javax.swing.*;
@@ -18,7 +20,7 @@ public class MenuBarService {
     int shortcutKey;
 
     public MenuBarService(ActionListener listener) {
-        shortcutKey = KeyEvent.CTRL_DOWN_MASK;
+        shortcutKey = JNotepad.os == OperatingSystem.MAC ? KeyEvent.META_DOWN_MASK : KeyEvent.CTRL_DOWN_MASK;
         menuBar = new JMenuBar();
 
         createMenus();
