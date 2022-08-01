@@ -17,10 +17,9 @@ public class MenuBarService {
     private JMenu fileMenu, editMenu, formatMenu, helpMenu;
 
     /** Key used for shortcuts */
-    int shortcutKey;
+    public static int shortcutKey = JNotepad.os == OperatingSystem.MAC ? KeyEvent.META_DOWN_MASK : KeyEvent.CTRL_DOWN_MASK;
 
     public MenuBarService(ActionListener listener) {
-        shortcutKey = JNotepad.os == OperatingSystem.MAC ? KeyEvent.META_DOWN_MASK : KeyEvent.CTRL_DOWN_MASK;
         menuBar = new JMenuBar();
 
         createMenus();

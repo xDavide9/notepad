@@ -1,6 +1,7 @@
 package com.xdavide9.jnotepad.gui;
 
 import com.xdavide9.jnotepad.JNotepad;
+import com.xdavide9.jnotepad.services.MenuBarService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -48,6 +49,7 @@ public class Find {
         frame.setIconImage(icon);
         frame.setResizable(false);
         frame.setBounds(100, 100, 392, 181);
+
         JPanel contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         frame.setContentPane(contentPane);
@@ -93,6 +95,19 @@ public class Find {
                         BorderFactory.createEmptyBorder(1, 6, 2, 4)));
             }
         });
+
+        // when CTRL+F is pressed while the Find window is in focus, select the text in searchTextField & request focus
+        JRootPane rootPane = frame.getRootPane();
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(KeyEvent.VK_F, MenuBarService.shortcutKey), "Find In Focus");
+        rootPane.getActionMap().put("Find In Focus", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                searchTextField.select(0, searchTextField.getText().length());
+                SwingUtilities.invokeLater(() -> searchTextField.requestFocus());
+            }
+        });
+
         // disable the 'Find Next' button if the text field is empty
         searchTextField.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -156,13 +171,14 @@ public class Find {
         contentPane.add(wrap);
     }
 
-    /** When Control+F is pressed, display the Find Frame */
+    /** When Control+F is pressed, display the Find Frame and select all text inside searchTextField */
     public void openFindWindow() {
         if(!frame.isVisible()) {
             frame.setLocationRelativeTo(gui.getFrame());
             frame.setVisible(true);
         }
 
+        searchTextField.select(0, searchTextField.getText().length());
         SwingUtilities.invokeLater(() -> searchTextField.requestFocus());
     }
 
