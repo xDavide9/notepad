@@ -49,6 +49,9 @@ public class JNotepad {
     }
 
     private static void customizeLaf() {
+        if(os == OperatingSystem.MAC)
+            System.setProperty("apple.awt.application.appearance", "system"); // allows the title bar to be dark on Mac
+
         try {
             UIManager.setLookAndFeel(new FlatDarculaLaf() {
                 //removing the content of this method because it was responsible for producing an annoying beep sound
