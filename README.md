@@ -7,7 +7,7 @@
 > Inspired by Windows 10 Notepad, but dark-themed
 
 ### Installation
-- For Windows, you can install [JNotepad.exe](https://github.com/woodrow73/JNotepad/releases) as a standalone application
+- For a standalone application, there's [JNotepad.exe](https://github.com/woodrow73/JNotepad/releases) for Windows, or [JNotepad.dmg](https://github.com/woodrow73/JNotepad/releases) for Mac
 - To run the [_Jar_](https://github.com/woodrow73/JNotepad/releases), make sure you have [_Java 17_](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) or later installed
 - You can run the application with `java -jar JNotepadFork-<<version>>.jar`
 
