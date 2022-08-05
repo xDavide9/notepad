@@ -6,7 +6,7 @@
 
     <groupId>com.xdavide9</groupId>
     <artifactId>JNotepad</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.3</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -108,13 +108,13 @@
 
 <!--        after everything is shaded into an uber jar created with:
 
-            mvw clean install
+            mvnw clean install
 
             use jpackage to create an installer for the specific platform:
 
-            jpackage -type "exe" -app-version 1.2.1 -name JNotepad
+            jpackage -type "exe" -app-version 1.2.3 -name JNotepad
             -dest target -icon src/main/resources/com/xdavide9/jnotepad/icon.ico
-            -main-jar JNotepad-1.2.1.jar -win-dir-chooser -input . -win-shortcut
+            -main-jar JNotepad-1.2.3.jar -win-dir-chooser -input target -win-shortcut
 
             where each - should be two -
 -->
