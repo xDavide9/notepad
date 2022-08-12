@@ -1,17 +1,17 @@
 /**
  * Copyright 2022 xDavide9
  * .
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * .
- *        http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * .
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.xdavide9.jnotepad;
 
@@ -64,14 +64,15 @@ public class JNotepad {
     }
 
     private static void customizeLaf() {
-        if(os == OperatingSystem.MAC)
+        if (os == OperatingSystem.MAC)
             System.setProperty("apple.awt.application.appearance", "system"); // allows the title bar to be dark on Mac
 
         try {
             UIManager.setLookAndFeel(new FlatDarculaLaf() {
                 //removing the content of this method because it was responsible for producing an annoying beep sound
                 @Override
-                public void provideErrorFeedback(Component component) {}
+                public void provideErrorFeedback(Component component) {
+                }
             });
         } catch (UnsupportedLookAndFeelException e) {
             log.error("Could not set up Look and Feel", e);

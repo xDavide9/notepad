@@ -3,17 +3,21 @@
 [![author](https://img.shields.io/badge/author-xDavide9-brightgreen)](https://github.com/xDavide9)
 [![license](https://img.shields.io/github/license/xDavide9/JNotepad?color=red)](https://github.com/xDavide9/JNotepad)
 [![java version](https://img.shields.io/badge/Java-17-blue)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+[![version](https://img.shields.io/github/v/release/xDavide9/JNotepad?color=orange)](https://github.com/xDavide9/JNotepad/releases)
 
 > Inspired by Windows 10 Notepad, but dark-themed
 
 ### Installation
+
 - For Windows, you can install [JNotepad.exe](https://github.com/xDavide9/JNotepad/releases) as a standalone application
-- To run the [_Jar_](https://github.com/xDavide9/JNotepad/releases), make sure you have [_Java 17_](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) or later installed
+- To run the [_Jar_](https://github.com/xDavide9/JNotepad/releases), make sure you have [_Java
+  17_](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) or later installed
 - You can run the application with `java -jar JNotepad-<<version>>.jar`
 
 ### Features
 
-- Modern look thanks to [_Flatlaf_](https://www.formdev.com/flatlaf/#:~:text=FlatLaf%20is%20a%20modern%20open,on%20Java%208%20or%20newer.)
+- Modern look thanks to [_
+  Flatlaf_](https://www.formdev.com/flatlaf/#:~:text=FlatLaf%20is%20a%20modern%20open,on%20Java%208%20or%20newer.)
 - Great package of functions
 - Entirely built with _JDK 17.0.1_ using the _Swing API_
 
@@ -32,7 +36,7 @@
 ### Credits
 
 - Thanks to [woodrow73](https://github.com/woodrow73) for contribution!
-- [Icon](https://www.freeiconspng.com/img/17522)  
+- [Icon](https://www.freeiconspng.com/img/17522)
 - [Laf](https://github.com/JFormDesigner/FlatLaf)
 
 
